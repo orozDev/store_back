@@ -97,11 +97,11 @@ if json.loads(config('USE_POSTGRESQL')):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': config('DB_NAME'),
-            'USER': config('DB_USERNAME'),
-            'PASSWORD': config('DB_PASSWORD'),
-            'HOST': config('HOST'),
-            'PORT': config('PORT'),
+            'NAME': config('POSTGRES_DB'),
+            'USER': config('POSTGRES_USER'),
+            'PASSWORD': config('POSTGRES_PASSWORD'),
+            'HOST': config('POSTGRES_HOST'),
+            'PORT': config('POSTGRES_PORT'),
         }
     }
 else:
