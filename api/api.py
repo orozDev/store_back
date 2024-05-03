@@ -2,29 +2,34 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from api.mixins import SuperModelViewSet
+from api.mixins import SuperModelViewSet, UltraModelViewSet
 from api.paginations import StandardResultsSetPagination
-from api.permissions import IsOwnerComment, IsOwnerCommentImage
-from api.serializers import CommentSerializer, CommentImageSerializer
+from api.permissions import IsOwnerCommentImage, IsOwner
+from api.serializers import CommentSerializer, CommentImageSerializer, ReadCommentSerializer
 from core.models import Comment, CommentImage
 
 
-class CommentViewSet(SuperModelViewSet):
+class CommentViewSet(UltraModelViewSet):
     queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
+    serializer_classes = {
+        'create': CommentSerializer,
+        'update': CommentSerializer,
+        'list': ReadCommentSerializer,
+        'retrieve': ReadCommentSerializer
+    }
     pagination_class = StandardResultsSetPagination
     filter_backends = [DjangoFilterBackend,
                        filters.OrderingFilter,
                        filters.SearchFilter]
     ordering_fields = ['created_at']
     search_fields = ['name', 'email', 'text']
-    filterset_fields = ['product']
+    filterset_fields = ['product_item', 'user']
     permission_classes_by_action = {
-        'create': (AllowAny,),
+        'create': (IsAuthenticated,),
         'list': (AllowAny,),
-        'update': (IsAuthenticated, IsOwnerComment,),
+        'update': (IsAuthenticated, IsOwner,),
         'retrieve': (AllowAny,),
-        'destroy': (IsAuthenticated, IsOwnerComment,),
+        'destroy': (IsAuthenticated, IsOwner,),
     }
 
 

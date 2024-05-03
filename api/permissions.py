@@ -33,4 +33,16 @@ class IsOwnerComment(permissions.BasePermission):
 
 class IsOwnerCommentImage(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        return request.user.email == obj.comment.email or request.user.is_superuser
+        return request.user == obj.comment.user or request.user.is_superuser
+
+
+class IsOwnerProduct(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        return request.user == obj.product.user or request.user.is_superuser
+
+
+class IsOwnerProductItem(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        return request.user == obj.product_item.product.user or request.user.is_superuser

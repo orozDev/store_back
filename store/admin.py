@@ -1,12 +1,12 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from store.models import Product, ProductImage, ProductAttribute, LinkedProduct, Category, Tag
+from store.models import Product, ProductItemImage, ProductAttribute, Category, Tag, ProductItem
 from django import forms
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 
 class ProductImageStackedInline(admin.StackedInline):
-    model = ProductImage
+    model = ProductItemImage
     extra = 1
     readonly_fields = ('created_at', 'updated_at',)
 
@@ -29,24 +29,50 @@ class ProductAdminForm(forms.ModelForm):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'price', 'category', 'is_published', 'get_image',)
+    list_display = ('id', 'name', 'category', 'is_published', 'get_image',)
     list_display_links = ('id', 'name',)
     list_editable = ('is_published',)
     list_filter = ('tags', 'category',)
-    search_fields = ('name', 'description', 'content', 'price', 'color', 'attribute',)
+    search_fields = ('name', 'description', 'content', 'items_color', 'items_attribute',)
     readonly_fields = ('get_full_image', 'created_at', 'updated_at',)
-    inlines = (ProductImageStackedInline, ProductAttributeStackedInline,)
+    inlines = (ProductAttributeStackedInline,)
     form = ProductAdminForm
+    raw_id_fields = ('category',)
+    filter_horizontal = ('tags',)
 
     @admin.display(description=_('изображение'))
     def get_image(self, obj):
-        if self.image:
+        image = self.items.first().image
+        if image:
+            return f'<img src="{image.url}" alt="{obj.name}" width="150px">'
+        return '-'
+
+    @admin.display(description=_('изображение'))
+    def get_full_image(self, obj: Product):
+        image = obj.items.first().image
+        if image:
+            return f'<img src="{image.url}" alt="{obj.name}" width="75%">'
+        return '-'
+
+
+@admin.register(ProductItem)
+class ProductItemAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'product', 'color', 'price', 'get_image')
+    list_filter = ('product__category', 'product__tags', 'product__is_published')
+    search_fields = ('name', 'product__name', 'product__description', 'product__content')
+    readonly_fields = ('get_full_image', 'created_at', 'updated_at',)
+    inlines = (ProductImageStackedInline,)
+    raw_id_fields = ('product',)
+
+    @admin.display(description=_('изображение'))
+    def get_image(self, obj: ProductItem):
+        if obj.image:
             return f'<img src="{obj.image.url}" alt="{obj.name}" width="150px">'
         return '-'
 
     @admin.display(description=_('изображение'))
-    def get_full_image(self, obj):
-        if self.image:
+    def get_full_image(self, obj: ProductItem):
+        if obj.image:
             return f'<img src="{obj.image.url}" alt="{obj.name}" width="75%">'
         return '-'
 
@@ -67,13 +93,5 @@ class TagAdmin(admin.ModelAdmin):
     search_fields = ('name', 'id',)
     readonly_fields = ('created_at', 'updated_at',)
 
-
-@admin.register(LinkedProduct)
-class LinkedProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name',)
-    list_display_links = ('id', 'name',)
-    search_fields = ('name', 'id',)
-    list_filter = ('products',)
-    readonly_fields = ('created_at', 'updated_at',)
 
 # Register your models here.

@@ -14,7 +14,8 @@ class Comment(TimeStampAbstractModel):
     name = models.CharField(_('Имя и фамилия'), max_length=100)
     email = models.EmailField(_('электронная почта'))
     text = models.CharField(_('текст'), max_length=300)
-    product = models.ForeignKey('store.Product', models.CASCADE, verbose_name=_('продукт'))
+    user = models.ForeignKey('account.User', models.CASCADE, related_name='comments', verbose_name=_('пользователь'))
+    product_item = models.ForeignKey('store.ProductItem', models.CASCADE, verbose_name=_('продукт'))
 
     def __str__(self):
         return f'{self.name} - {self.email}'

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'django_filters',
     'django_cleanup',
     'ckeditor_uploader',
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     'rest_registration',
     'corsheaders',
     'ckeditor',
+
     'account',
     'core',
     'store',

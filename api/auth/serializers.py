@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from account.models import User
+from django.utils.translation import gettext_lazy as _
 
 
 class ProfileSerializer(serializers.ModelSerializer):

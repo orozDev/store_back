@@ -1,18 +1,7 @@
 from rest_framework import serializers
 
 from core.models import Comment, CommentImage
-from store.models import Product
-
-
-class ProductCommentSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Product
-        fields = (
-            'id',
-            'name',
-            'price',
-        )
+from utils.serializers import ShortDescUserSerializer
 
 
 class CommentImageSerializer(serializers.ModelSerializer):
@@ -22,11 +11,32 @@ class CommentImageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CommentSerializer(serializers.ModelSerializer):
+class ImageForCommentSerializer(serializers.ModelSerializer):
 
-    product_detail = ProductCommentSerializer(source='product', read_only=True, many=False)
-    images = CommentImageSerializer(read_only=True, many=True)
+    class Meta:
+        model = CommentImage
+        exclude = ('comment',)
+
+
+class ReadCommentSerializer(serializers.ModelSerializer):
+
+    user = ShortDescUserSerializer()
+    images = ImageForCommentSerializer(many=True)
 
     class Meta:
         model = Comment
         fields = '__all__'
+
+
+class CommentSerializer(serializers.ModelSerializer):
+
+    images = ImageForCommentSerializer(many=True)
+
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        validated_data['user'] = user
+        return super().create(validated_data)

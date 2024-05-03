@@ -21,12 +21,13 @@ class CommentAdminForm(forms.ModelForm):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'email', 'product',)
-    list_display_links = ('id', 'name',)
-    list_filter = ('product',)
-    search_fields = ('id', 'name', 'email', 'text',)
+    list_display = ('id', 'name', 'email', 'product_item', 'user')
+    list_display_links = ('id', 'name')
+    list_filter = ('product_item', 'user')
+    search_fields = ('id', 'name', 'email', 'text')
     inlines = (CommentImageStackedInline,)
-    readonly_fields = ('created_at', 'updated_at',)
+    readonly_fields = ('created_at', 'updated_at')
     form = CommentAdminForm
+    raw_id_fields = ('product_item', 'user')
 
 # Register your models here.
