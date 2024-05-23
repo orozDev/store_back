@@ -42,16 +42,16 @@ class ProductAdmin(admin.ModelAdmin):
 
     @admin.display(description=_('изображение'))
     def get_image(self, obj):
-        image = self.items.first().image
+        image = self.items.first()
         if image:
-            return f'<img src="{image.url}" alt="{obj.name}" width="150px">'
+            return f'<img src="{image.image.url}" alt="{obj.name}" width="150px">'
         return '-'
 
     @admin.display(description=_('изображение'))
     def get_full_image(self, obj: Product):
-        image = obj.items.first().image
+        image = obj.items.first()
         if image:
-            return f'<img src="{image.url}" alt="{obj.name}" width="75%">'
+            return f'<img src="{image.image.url}" alt="{obj.name}" width="75%">'
         return '-'
 
 
