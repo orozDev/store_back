@@ -42,7 +42,7 @@ class ProductAdmin(admin.ModelAdmin):
 
     @admin.display(description=_('изображение'))
     def get_image(self, obj):
-        image = self.items.first()
+        image = obj.items.first()
         if image:
             return f'<img src="{image.image.url}" alt="{obj.name}" width="150px">'
         return '-'
