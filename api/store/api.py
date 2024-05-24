@@ -96,7 +96,7 @@ class ProductItemViewSet(UltraModelViewSet):
                        filters.SearchFilter]
     ordering_fields = ['created_at']
     search_fields = ['product__name', 'product__description', 'product__content', 'color', 'name']
-    filterset_fields = ['product', 'product__category', 'product__tags']
+    filterset_fields = ['product', 'product__category', 'product__tags', 'product__user']
     permission_classes_by_action = {
         'create': (IsAuthenticated, IsSuperAdmin),
         'list': (AllowAny,),
@@ -126,7 +126,7 @@ class ProductViewSet(UltraModelViewSet):
                        filters.SearchFilter]
     ordering_fields = ['created_at']
     search_fields = ['name', 'description', 'content', 'color', 'name']
-    filterset_fields = ['category', 'tags', 'is_published']
+    filterset_fields = ['category', 'tags', 'is_published', 'user']
     permission_classes_by_action = {
         'create': (IsAuthenticated,),
         'list': (AllowAny,),

@@ -30,15 +30,15 @@ class ProductAdminForm(forms.ModelForm):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'category', 'is_published', 'get_image',)
+    list_display = ('id', 'name', 'category', 'is_published', 'user', 'get_image',)
     list_display_links = ('id', 'name',)
     list_editable = ('is_published',)
-    list_filter = ('tags', 'category',)
+    list_filter = ('tags', 'category', 'user')
     search_fields = ('name', 'description', 'content', 'items_color', 'items_attribute',)
     readonly_fields = ('get_full_image', 'created_at', 'updated_at',)
     inlines = (ProductAttributeStackedInline,)
     form = ProductAdminForm
-    raw_id_fields = ('category',)
+    raw_id_fields = ('category', 'user')
     filter_horizontal = ('tags',)
 
     @admin.display(description=_('изображение'))
