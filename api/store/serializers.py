@@ -101,7 +101,7 @@ class CreateUpdateProductSerializer(WritableNestedModelSerializer):
 
     class Meta:
         model = Product
-        fields = '__all__'
+        exclude = ('user',)
 
     def create(self, validated_data):
         user = self.context['request'].user
