@@ -33,6 +33,7 @@ class Product(TimeStampAbstractModel):
     category = models.ForeignKey('store.Category', models.PROTECT, verbose_name=_('категория'))
     tags = models.ManyToManyField('store.Tag', verbose_name=_('теги'))
     is_published = models.BooleanField(_('публичность'), default=False)
+    user = models.ForeignKey('account.User', models.CASCADE, verbose_name=_('пользователь'))
 
     # @property
     # def products(self):
