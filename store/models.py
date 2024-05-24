@@ -134,7 +134,7 @@ class ProductItemImage(TimeStampAbstractModel):
 
     def clean(self):
         if self.is_main:
-            product_images = ProductItemImage.objects.filter(product=self.product, is_main=True)
+            product_images = ProductItemImage.objects.filter(product=self.product_item, is_main=True)
             if product_images.exists():
                 raise ValidationError({'is_main': [_('Только одна картина может быть главным')]})
 
