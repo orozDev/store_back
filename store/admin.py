@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from store.models import Product, ProductItemImage, ProductAttribute, Category, Tag, ProductItem
 from django import forms
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
+from django.utils.safestring import mark_safe
 
 
 class ProductImageStackedInline(admin.StackedInline):
@@ -44,14 +45,14 @@ class ProductAdmin(admin.ModelAdmin):
     def get_image(self, obj):
         image = obj.items.first()
         if image:
-            return f'<img src="{image.image.url}" alt="{obj.name}" width="150px">'
+            return mark_safe(f'<img src="{image.image.url}" alt="{obj.name}" width="150px">')
         return '-'
 
     @admin.display(description=_('изображение'))
     def get_full_image(self, obj: Product):
         image = obj.items.first()
         if image:
-            return f'<img src="{image.image.url}" alt="{obj.name}" width="75%">'
+            return mark_safe(f'<img src="{image.image.url}" alt="{obj.name}" width="75%">')
         return '-'
 
 
@@ -67,13 +68,13 @@ class ProductItemAdmin(admin.ModelAdmin):
     @admin.display(description=_('изображение'))
     def get_image(self, obj: ProductItem):
         if obj.image:
-            return f'<img src="{obj.image.url}" alt="{obj.name}" width="150px">'
+            return mark_safe(f'<img src="{obj.image.url}" alt="{obj.name}" width="150px">')
         return '-'
 
     @admin.display(description=_('изображение'))
     def get_full_image(self, obj: ProductItem):
         if obj.image:
-            return f'<img src="{obj.image.url}" alt="{obj.name}" width="75%">'
+            return mark_safe(f'<img src="{obj.image.url}" alt="{obj.name}" width="75%">')
         return '-'
 
 
