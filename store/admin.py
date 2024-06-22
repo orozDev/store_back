@@ -44,7 +44,7 @@ class ProductAdmin(admin.ModelAdmin):
     @admin.display(description=_('изображение'))
     def get_image(self, obj):
         image = obj.items.first()
-        if image:
+        if image and image.image:
             return mark_safe(f'<img src="{image.image.url}" alt="{obj.name}" width="150px">')
         return '-'
 
