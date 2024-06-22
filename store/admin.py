@@ -80,11 +80,23 @@ class ProductItemAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'parent',)
+    list_display = ('id', 'name', 'parent', 'get_image')
     list_display_links = ('id', 'name',)
     search_fields = ('name', 'id',)
     list_filter = ('parent',)
-    readonly_fields = ('created_at', 'updated_at',)
+    readonly_fields = ('get_full_image', 'created_at', 'updated_at',)
+
+    @admin.display(description=_('изображение'))
+    def get_image(self, obj: Category):
+        if obj.image:
+            return mark_safe(f'<img src="{obj.image.url}" alt="{obj.name}" width="150px">')
+        return '-'
+
+    @admin.display(description=_('изображение'))
+    def get_full_image(self, obj: Category):
+        if obj.image:
+            return mark_safe(f'<img src="{obj.image.url}" alt="{obj.name}" width="75%">')
+        return '-'
 
 
 @admin.register(Tag)
