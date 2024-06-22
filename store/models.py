@@ -94,6 +94,7 @@ class Category(TimeStampAbstractModel):
         ordering = ('-created_at', '-updated_at')
 
     name = models.CharField(_('название'), max_length=100, unique=True)
+    image = models.ImageField(_('изображение'), upload_to='category_images/', null=True, blank=True)
     parent = models.ForeignKey('self', models.SET_NULL, 'children',
                                verbose_name=_('родительская категория'), blank=True, null=True)
 
